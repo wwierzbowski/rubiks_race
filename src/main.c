@@ -5,6 +5,7 @@
 #include "board.h"
 #include "gfx/gfx.h"
 #include "input.h"
+#include "menu.h"
 #include "render.h"
 
 void load_new_game(uint8_t board[BOARD_SIZE][BOARD_SIZE], uint8_t goal[3][3], Coord *empty, unsigned int *moves) {
@@ -29,11 +30,21 @@ int main(void)
     gfx_SetPalette(global_palette, sizeof_global_palette, 0);
     gfx_ZeroScreen();
 
+    int menu_selection = run_main_menu();
+    if (menu_selection != MENU_NEW_GAME) {
+        gfx_End();
+        return 0;
+    }
+
+    gfx_SetDrawBuffer();
+    gfx_ZeroScreen();
+    gfx_SetTextScale(1, 1);
     gfx_SetTextXY(0, 0);
     gfx_SetTextFGColor(6);
 
     init_board(board);
     load_new_game(board, goal, &empty, &moves);
+    gfx_SwapDraw();
 
     kb_key_t previous_arrows = 0;
     Coord previous_direction = {0, 0};
