@@ -55,6 +55,22 @@ int run_main_menu(void) {
     const uint8_t main_menu_len = 3;
     kb_key_t previous_arrows = 0;
 
+    // Carryover from entering the app
+    {
+            gfx_SetDrawBuffer();
+            gfx_ZeroScreen();
+
+            draw_menu_title();
+            draw_menu_selection(menu_selection_idx);
+            draw_menu_options();
+
+            gfx_SwapDraw();
+
+            while (kb_Data[1] || kb_Data[6]) {
+                kb_Scan();
+            }
+    }
+
     while (true) {
         gfx_SetDrawBuffer();
         gfx_ZeroScreen();
@@ -74,7 +90,7 @@ int run_main_menu(void) {
         if (kb_Data[6] == kb_Enter || kb_Data[1] == kb_2nd) {
             return menu_selection_idx;
         }
-        
+
         if (arrows == previous_arrows) {
             continue;
         }
