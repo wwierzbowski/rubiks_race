@@ -8,7 +8,7 @@
 #include "menu.h"
 #include "render.h"
 
-void load_new_game(uint8_t board[BOARD_SIZE][BOARD_SIZE], uint8_t goal[3][3], Coord *empty, unsigned int *moves) {
+void load_new_game(uint8_t board[BOARD_SIZE][BOARD_SIZE], uint8_t goal[3][3], Coord *empty, uint16_t *moves) {
     shuffle_board(board, empty);
     create_goal(goal);
     draw_board(board, goal);
@@ -18,22 +18,28 @@ void load_new_game(uint8_t board[BOARD_SIZE][BOARD_SIZE], uint8_t goal[3][3], Co
 
 int main(void)
 {
+    init_main_menu();
     srand(rtc_Time());
     uint8_t board[BOARD_SIZE][BOARD_SIZE];
 
     uint8_t goal[3][3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
 
     Coord empty = {0, 0};
-    unsigned int moves = 0;
+    uint16_t moves = 0;
 
     gfx_Begin();
     gfx_SetPalette(global_palette, sizeof_global_palette, 0);
     gfx_ZeroScreen();
 
     int menu_selection = run_main_menu();
-    if (menu_selection != MENU_NEW_GAME) {
-        gfx_End();
-        return 0;
+    switch (menu_selection) {
+        case MENU_NEW_GAME:
+            break;
+        case MENU_SET_SEED:
+        case MENU_PROFILES:
+        default:
+            gfx_End();
+            return 0;
     }
 
     gfx_SetDrawBuffer();

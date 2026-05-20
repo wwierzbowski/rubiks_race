@@ -9,6 +9,7 @@ enum MenuSelection {
     MENU_PROFILES = 2
 };
 
+void init_main_menu(void);
 int run_main_menu(void);
 
 #endif
